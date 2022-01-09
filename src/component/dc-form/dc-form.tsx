@@ -1,23 +1,27 @@
 import { Form } from 'antd';
-import { useEffect, useState } from 'react';
-import { DcFormProps, FormItem } from './interface';
+import React, {Ref, useEffect, useImperativeHandle, useState} from 'react';
+import {DcFormProps, DcFormRefProps, FormItem} from './interface';
 import WidgetFactory from './widget.factory';
 
-export default function DcForm(props: DcFormProps) {
+const DcForm = React.forwardRef<DcFormRefProps, DcFormProps>((props, ref) => {
   const { config } = props;
   const { required, name, ui = {}, autoComplete } = config;
   const { labelCol, wrapperCol, layout } = ui;
   const [list, setList] = useState<FormItem[]>([]);
-  const [form] = Form.useForm();
+  const [dcForm] = Form.useForm();
+
+  useImperativeHandle(ref, () => ({
+    form: dcForm,
+  }));
 
   useEffect(() => {
     const list: FormItem[] = config.properties;
-    setList(list);
+    setList(list.sort((item1, item2) => Number(item1.weight) - Number(item2.weight)));
   }, []);
 
   return (
     <Form
-      form={form}
+      form={dcForm}
       name={name}
       layout={layout}
       labelCol={labelCol}
@@ -47,4 +51,6 @@ export default function DcForm(props: DcFormProps) {
       })}
     </Form>
   );
-}
+})
+
+export default DcForm;
