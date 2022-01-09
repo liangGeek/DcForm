@@ -2,22 +2,12 @@ import DcForm from "@/component/dc-form/dc-form";
 import {Button} from "antd";
 import {useRef} from "react";
 import {DcFormRefProps} from "@/component/dc-form/interface";
+import {FormConfig} from "@/pages/form/config";
 
 export default function Page() {
   const form = useRef<DcFormRefProps>(null);
-  const config = {
-    properties: [{
-      widget: 'input',
-      name: 'name',
-      label: '姓名',
-      weight: 1,
-    }, {
-      widget: 'number',
-      name: 'age',
-      label: '年龄',
-      weight: 1,
-    }],
-    required: ['name', 'age']
+  const initialValues = {
+    type: '1'
   }
 
   function getForm() {
@@ -28,7 +18,7 @@ export default function Page() {
 
   return (
     <div>
-      <DcForm config={config} ref={form}/>
+      <DcForm config={FormConfig} ref={form} initialValues={initialValues}/>
       <Button onClick={getForm}>click</Button>
     </div>
   );

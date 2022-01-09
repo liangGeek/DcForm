@@ -1,12 +1,14 @@
-import { Input, InputNumber } from 'antd';
+import { Input, InputNumber, Select } from 'antd';
+import DcInput from "@/component/dc-form/form-item/dc-input";
 
 const widgets: any = {};
 
 export default class WidgetFactory {
 
   constructor() {
-    this.register('input', Input);
+    this.register('input', DcInput);
     this.register('number', InputNumber);
+    this.register('select', Select);
   }
 
   getWidgets(): any {

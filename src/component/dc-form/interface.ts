@@ -10,6 +10,12 @@ export interface DcFormRefProps {
 
 export interface DcFormProps {
   config: DcFormConfig;
+  initialValues?: any;
+}
+
+export interface DcFormItemProps {
+  value?: any;
+  onChange?: (res: any) => void;
 }
 
 export interface DcFormConfig {
@@ -32,8 +38,19 @@ export interface FormItem {
   label?: string;
   rules?: Rule[];
   weight?: number;
+  props?: any;
   ui?: {
     labelCol?: ColProps;
     wrapperCol?: ColProps;
+  },
+  if?: {
+    [key: string]: string[]
   }
+}
+
+export interface DcObserver {
+  observerList: {[key: string]: any[]};
+  subscribe: (name: string, fn: (res: any) => void) => void;
+  publish: (name: string, res: any) => void;
+  unsubscribe: (name: string) => void;
 }
