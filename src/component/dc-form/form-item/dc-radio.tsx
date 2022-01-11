@@ -1,10 +1,10 @@
-import {Select} from "antd";
-import {DcSelectProps} from "@/component/dc-form/interface/dc-select-props";
+import {Radio} from "antd";
+import {DcRadioProps} from "@/component/dc-form/interface/dc-radio-props";
 import {useEffect, useState} from "react";
 import {LabelValue} from "@/component/dc-form/interface/interface";
 import dcObserver from "@/component/dc-form/util/observer";
 
-export default function DcSelect(props: DcSelectProps) {
+export default function DcRadio(props: DcRadioProps) {
   const {value, onChange, options, optionsIf} = props;
   const [optionList, setOptionList] = useState<LabelValue[]>([]);
 
@@ -38,5 +38,10 @@ export default function DcSelect(props: DcSelectProps) {
     }
   }
 
-  return <Select value={value} onChange={onChange} options={optionList}/>;
+  function changeValue(e: any) {
+    onChange?.(e.target.value);
+  }
+
+  return <Radio.Group value={value} onChange={changeValue} options={optionList}/>;
+
 }

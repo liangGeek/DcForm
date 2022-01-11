@@ -17,16 +17,15 @@ const DcForm = React.forwardRef<DcFormRefProps, DcFormProps>((props, ref) => {
   }));
 
   useEffect(() => {
+    dataTrigger();
     initForm();
   }, []);
 
-  // function dataTrigger() {
-  //   setTimeout(() => {
-  //     Object.entries(initialValues).forEach(([key, value]: [string, any]) => {
-  //       dcObserver.publish(key, value);
-  //     })
-  //   }, 5000)
-  // }
+  function dataTrigger() {
+    Object.entries(initialValues).forEach(([key, value]: [string, any]) => {
+      dcObserver.publish(key, value);
+    })
+  }
 
   function initForm() {
     let properties: FormItem[] = config.properties;
@@ -36,11 +35,13 @@ const DcForm = React.forwardRef<DcFormRefProps, DcFormProps>((props, ref) => {
       }
       return Object.entries(item.if).every(([key, values]: [string, string[]]) => {
         dcObserver.subscribe(key, (res: any) => {
-          console.log(res);
           if (values.includes(res)) {
-            if (list.every(i => i.name !== item.name)) {
-              setList((list) => [...list, item]);
-            }
+            setList((list) => {
+              if (list.every(i => i.name !== item.name)) {
+                return [...list, item];
+              }
+              return list;
+            });
           } else {
             dcObserver.publish(item.name, "");
             setList((list) => [...list.filter(i => i.name !== item.name)]);
@@ -49,10 +50,11 @@ const DcForm = React.forwardRef<DcFormRefProps, DcFormProps>((props, ref) => {
         return values.includes(initialValues?.[key]);
       });
     });
-    setList(properties.sort((item1, item2) => Number(item1.weight) - Number(item2.weight)));
+    setList(() => properties.sort((item1, item2) => Number(item1.weight) - Number(item2.weight)));
   }
 
   function changeValue(name: string, value: any) {
+    console.log(name, value)
     dcObserver.publish(name, value);
   }
 

@@ -7,7 +7,8 @@ import {FormConfig} from "@/pages/form/config";
 export default function Page() {
   const form = useRef<DcFormRefProps>(null);
   const initialValues = {
-    type: '1'
+    type: '1',
+    show: '1'
   }
 
   function getForm() {

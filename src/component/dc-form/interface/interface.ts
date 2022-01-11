@@ -50,6 +50,7 @@ export interface FormItem {
 
 export interface DcObserver {
   observerList: {[key: string]: any[]};
+  historyList: {[key: string]: any[]};
   subscribe: (name: string, fn: (res: any) => void) => void;
   publish: (name: string, res: any) => void;
   unsubscribe: (name: string) => void;

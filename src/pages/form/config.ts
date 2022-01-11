@@ -3,7 +3,7 @@ import { DcFormConfig } from "@/component/dc-form/interface/interface";
 export const FormConfig: DcFormConfig = {
   properties: [
     {
-      widget: "select",
+      widget: "radio",
       name: "type",
       label: "类型",
       weight: 1,
@@ -15,6 +15,33 @@ export const FormConfig: DcFormConfig = {
           value: "2",
           label: "机构"
         }]
+      }
+    },
+    {
+      widget: 'datePicker',
+      name: 'date',
+      label: '日期'
+    },
+    {
+      widget: 'timePicker',
+      name: 'time',
+      label: '时间'
+    },
+    {
+      widget: 'checkbox',
+      name: 'day',
+      label: '天',
+      props: {
+        optionsIf: {
+          name: 'type',
+          getOptions: (value: any) => {
+            if (value === '1') {
+              return [{value: '1', label: '星期1'}, {value: '2', label: '星期2'}]
+            } else {
+              return [{value: '3', label: '星期3'}, {value: '4', label: '星期4'}]
+            }
+          }
+        }
       }
     },
     {
@@ -95,7 +122,7 @@ export const FormConfig: DcFormConfig = {
       span: 8
     }
   },
-  required: ["name", "age", "orgName", "orgId"],
+  required: [],
   autoComplete: "off",
   preserve: false
 };

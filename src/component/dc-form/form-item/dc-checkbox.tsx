@@ -1,10 +1,10 @@
-import {Select} from "antd";
-import {DcSelectProps} from "@/component/dc-form/interface/dc-select-props";
+import {Checkbox} from "antd";
 import {useEffect, useState} from "react";
 import {LabelValue} from "@/component/dc-form/interface/interface";
 import dcObserver from "@/component/dc-form/util/observer";
+import {DcCheckboxProps} from "@/component/dc-form/interface/dc-checkbox-props";
 
-export default function DcSelect(props: DcSelectProps) {
+export default function DcCheckbox(props: DcCheckboxProps) {
   const {value, onChange, options, optionsIf} = props;
   const [optionList, setOptionList] = useState<LabelValue[]>([]);
 
@@ -14,7 +14,7 @@ export default function DcSelect(props: DcSelectProps) {
   }, []);
 
   useEffect(() => {
-    if (value && optionList.length && optionList.every(item => item.value !== value)) {
+    if (value && optionList.length && value.some(item => !optionList.map(item => item.value).includes(item))) {
       onChange?.(null);
     }
   }, [optionList, value])
@@ -38,5 +38,5 @@ export default function DcSelect(props: DcSelectProps) {
     }
   }
 
-  return <Select value={value} onChange={onChange} options={optionList}/>;
+  return <Checkbox.Group value={value} onChange={onChange} options={optionList}/>;
 }
