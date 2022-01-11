@@ -1,4 +1,4 @@
-import {DcObserver} from "@/component/dc-form/interface";
+import {DcObserver} from "@/component/dc-form/interface/interface";
 
 const dcObserver: DcObserver = {
   observerList: {},

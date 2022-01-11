@@ -1,7 +1,7 @@
 import DcForm from "@/component/dc-form/dc-form";
 import {Button} from "antd";
 import {useRef} from "react";
-import {DcFormRefProps} from "@/component/dc-form/interface";
+import {DcFormRefProps} from "@/component/dc-form/interface/interface";
 import {FormConfig} from "@/pages/form/config";
 
 export default function Page() {
