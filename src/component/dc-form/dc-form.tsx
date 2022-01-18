@@ -1,15 +1,15 @@
-import {Form} from 'antd';
+import {Col, Form, Row} from 'antd';
 import React, {useEffect, useImperativeHandle, useState} from 'react';
 import {DcFormProps, DcFormRefProps, FormItem} from './interface/interface';
 import WidgetFactory from './widget.factory';
 import dcObserver from "@/component/dc-form/util/observer";
-import { Rule } from 'antd/lib/form';
+import {Rule} from 'antd/lib/form';
 import './index.less';
 
 const DcForm = React.forwardRef<DcFormRefProps, DcFormProps>((props, ref) => {
-  const { config, initialValues = {} } = props;
-  const { required, name, ui = {}, autoComplete, preserve } = config;
-  const { labelCol, wrapperCol, layout } = ui;
+  const {config, initialValues = {}} = props;
+  const {required, name, ui = {}, autoComplete, preserve} = config;
+  const {labelCol, wrapperCol, layout, itemCol} = ui;
   const [list, setList] = useState<FormItem[]>([]);
   const [dcForm] = Form.useForm();
 
@@ -86,31 +86,35 @@ const DcForm = React.forwardRef<DcFormRefProps, DcFormProps>((props, ref) => {
       autoComplete={autoComplete}
       initialValues={initialValues}
     >
-      {list.map((item) => {
-        const widgetFactory = new WidgetFactory();
-        const Widget = widgetFactory.getType(item.widget);
-        let rules: Rule[] = [];
-        if (!Widget) {
-          return `${item.widget}控件`;
-        }
-        if (required && required.includes(item.name)) {
-          if (!item.rules) {
-            item.rules = [];
+      <Row>
+        {list.map((item) => {
+          const widgetFactory = new WidgetFactory();
+          const Widget = widgetFactory.getType(item.widget);
+          let rules: Rule[] = [];
+          if (!Widget) {
+            return `${item.widget}控件不存在`;
           }
-          rules = [...item.rules, {required: true, message: `${item.label}为必填项`}];
-        }
+          if (required && required.includes(item.name)) {
+            if (!item.rules) {
+              item.rules = [];
+            }
+            rules = [...item.rules, {required: true, message: `${item.label}为必填项`}];
+          }
 
-        return (
-          <Form.Item
-            key={item.name}
-            label={item.label}
-            name={item.name}
-            rules={rules}
-          >
-            <Widget {...item.props} onChange={(value: any) => changeValue(item.name, value)} />
-          </Form.Item>
-        );
-      })}
+          return (
+            <Col span={item.ui?.itemCol?.span ?? itemCol?.span ?? 24} key={item.name}>
+              <Form.Item
+                label={item.label}
+                name={item.name}
+                rules={rules}
+              >
+                <Widget {...item.props} onChange={(value: any) => changeValue(item.name, value)}/>
+              </Form.Item>
+            </Col>
+          );
+        })}
+      </Row>
+
     </Form>
   );
 })

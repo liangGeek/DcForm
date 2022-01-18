@@ -14,7 +14,7 @@ export const FormConfig: DcFormConfig = {
       }
     },
     {
-      widget: 'checkbox',
+      widget: 'checkboxGroup',
       name: 'months',
       label: '选择月',
       weight: 2,
@@ -38,7 +38,7 @@ export const FormConfig: DcFormConfig = {
       }
     },
     {
-      widget: 'checkbox',
+      widget: 'checkboxGroup',
       name: 'days',
       label: '天',
       if: {
@@ -93,6 +93,9 @@ export const FormConfig: DcFormConfig = {
     },
     wrapperCol: {
       span: 16
+    },
+    itemCol: {
+      span: 24
     }
   },
   required: ['type', 'dayType', 'months', 'days', 'time'],

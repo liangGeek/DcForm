@@ -2,9 +2,9 @@ import {Checkbox} from "antd";
 import {useEffect, useState} from "react";
 import {LabelValue} from "@/component/dc-form/interface/interface";
 import dcObserver from "@/component/dc-form/util/observer";
-import {DcCheckboxProps} from "@/component/dc-form/interface/dc-checkbox-props";
+import {DcCheckboxGroupProps} from "@/component/dc-form/interface/dc-checkboxGroup-props";
 
-export default function DcCheckbox(props: DcCheckboxProps) {
+export default function DcCheckboxGroup(props: DcCheckboxGroupProps) {
   const {value, onChange, options, optionsIf} = props;
   const [optionList, setOptionList] = useState<LabelValue[]>([]);
 

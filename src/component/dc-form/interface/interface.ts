@@ -26,6 +26,7 @@ export interface DcFormConfig {
     layout?: FormLayout,
     labelCol?: ColProps;
     wrapperCol?: ColProps;
+    itemCol?: ColProps;
   },
   autoComplete?: 'off' | 'on';
   preserve?: boolean;
@@ -40,6 +41,7 @@ export interface FormItem {
   weight?: number;
   props?: any;
   ui?: {
+    itemCol?: ColProps;
     labelCol?: ColProps;
     wrapperCol?: ColProps;
   },
