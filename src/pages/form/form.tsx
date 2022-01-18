@@ -8,7 +8,9 @@ export default function Page() {
   const form = useRef<DcFormRefProps>(null);
   const initialValues = {
     type: '1',
-    show: '1'
+    dayType: '1',
+    months: ['1', '2'],
+    days: ['2', '3']
   }
 
   function getForm() {

@@ -13,6 +13,10 @@ export default defineConfig({
     {
       path: '/form',
       component: 'form/form'
+    },
+    {
+      path: '/modal',
+      component: 'modal/modal'
     }
   ],
   fastRefresh: {}

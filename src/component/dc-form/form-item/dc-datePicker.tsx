@@ -12,7 +12,7 @@ export default function DcDatePicker(props: DcDatePickerProps) {
   }, [value])
 
   function changeValue(e: any) {
-    onChange?.(e.format(format));
+    onChange?.(e?.format(format));
   }
 
   return <DatePicker value={val} onChange={changeValue}/>

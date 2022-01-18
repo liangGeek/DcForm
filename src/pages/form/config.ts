@@ -1,117 +1,90 @@
-import { DcFormConfig } from "@/component/dc-form/interface/interface";
+import {DcFormConfig} from "@/component/dc-form/interface/interface";
+import {dayList, dayTypeList, monthList, typeList, weekList} from "@/pages/form/const";
+import {DayType, Type} from "@/pages/form/config.enum";
 
 export const FormConfig: DcFormConfig = {
   properties: [
     {
       widget: "radio",
       name: "type",
-      label: "类型",
+      label: "选择方式",
       weight: 1,
       props: {
-        options: [{
-          value: "1",
-          label: "人员"
-        }, {
-          value: "2",
-          label: "机构"
-        }]
+        options: typeList
       }
-    },
-    {
-      widget: 'datePicker',
-      name: 'date',
-      label: '日期'
-    },
-    {
-      widget: 'timePicker',
-      name: 'time',
-      label: '时间'
     },
     {
       widget: 'checkbox',
-      name: 'day',
+      name: 'months',
+      label: '选择月',
+      weight: 2,
+      if: {
+        type: [Type.定时]
+      },
+      props: {
+        options: monthList
+      }
+    },
+    {
+      widget: "radio",
+      name: "dayType",
+      label: "选择方式",
+      weight: 3,
+      if: {
+        type: [Type.定时]
+      },
+      props: {
+        options: dayTypeList
+      }
+    },
+    {
+      widget: 'checkbox',
+      name: 'days',
       label: '天',
+      if: {
+        type: [Type.定时],
+        dayType: [DayType.按星期, DayType.按日期]
+      },
+      weight: 4,
       props: {
         optionsIf: {
-          name: 'type',
+          name: 'dayType',
           getOptions: (value: any) => {
-            if (value === '1') {
-              return [{value: '1', label: '星期1'}, {value: '2', label: '星期2'}]
+            if (value === DayType.按日期) {
+              return dayList;
             } else {
-              return [{value: '3', label: '星期3'}, {value: '4', label: '星期4'}]
+              return weekList;
             }
           }
         }
       }
     },
     {
-      widget: "select",
-      name: "show",
-      label: "显示身高",
-      weight: 1,
-      props: {
-        // options: () => {
-        //   return new Promise(resolve => {
-        //     setTimeout(() => {
-        //       resolve([
-        //         {value: '1', label: '显示'},
-        //         {value: '0', label: '隐藏'},
-        //       ])
-        //     }, 2000)
-        //   })
-        // },
-        optionsIf: {
-          name: 'type',
-          getOptions: (value: any) => {
-            if (value === '1') {
-              return [{value: '1', label: '显示'}, {value: '0', label: '隐藏'}]
-            } else {
-              return [{value: '2', label: '显示1'}, {value: '3', label: '隐藏1'}]
-            }
-          }
-        }
-      }
-    },
-    {
-      widget: "input",
-      name: "name",
-      label: "姓名",
+      widget: "timePicker",
+      name: "time",
+      label: "选择时分",
       weight: 10,
       if: {
-        type: ["1"]
-      }
-    }, {
-      widget: "number",
-      name: "age",
-      label: "年龄",
-      weight: 11,
+        type: [Type.定时]
+      },
+    },
+    {
+      widget: "datePicker",
+      name: "date",
+      label: "选择日期",
+      weight: 10,
       if: {
-        type: ["1"]
-      }
-    }, {
-      widget: "number",
-      name: "height",
-      label: "身高",
-      weight: 11,
-      if: {
-        show: ["1"]
-      }
-    }, {
+        type: [Type.循环]
+      },
+    },
+    {
       widget: "input",
-      name: "orgName",
-      label: "机构名称",
-      weight: 13,
+      name: "cron",
+      label: "cron表达式",
+      weight: 10,
       if: {
-        type: ["2"]
-      }
-    }, {
-      widget: "number",
-      name: "orgId",
-      label: "机构id",
-      weight: 14,
-      if: {
-        type: ["2"]
-      }
+        type: [Type.自定义]
+      },
     }
   ],
   ui: {
@@ -119,10 +92,10 @@ export const FormConfig: DcFormConfig = {
       span: 4
     },
     wrapperCol: {
-      span: 8
+      span: 16
     }
   },
-  required: [],
+  required: ['type', 'dayType', 'months', 'days', 'time'],
   autoComplete: "off",
   preserve: false
 };

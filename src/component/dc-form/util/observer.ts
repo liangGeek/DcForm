@@ -17,6 +17,7 @@ const dcObserver: DcObserver = {
 
   publish(name: string, res: any) {
     if (this.observerList[name]) {
+      this.historyList[name] = res;
       this.observerList[name].forEach(fn => {
         fn(res);
       })
@@ -25,8 +26,15 @@ const dcObserver: DcObserver = {
     }
   },
 
-  unsubscribe(name: string) {
-    delete this.observerList[name];
+  unsubscribe(name: string, fn: () => void) {
+    const index = this.observerList[name].findIndex(item => item === fn);
+    this.observerList[name].splice(index, 1);
+  },
+
+  clear() {
+    Object.keys(this.observerList).forEach(key => {
+      delete this.observerList[key];
+    })
   }
 }
 

@@ -12,7 +12,7 @@ export default function DcTimePicker(props: DcTimePickerProps) {
   }, [value])
 
   function changeValue(e: any) {
-    onChange?.(e.format(format));
+    onChange?.(e?.format(format));
   }
 
   return <TimePicker value={val} onChange={changeValue}/>

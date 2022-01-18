@@ -11,6 +11,9 @@ export default function DcSelect(props: DcSelectProps) {
   useEffect(() => {
     initOptionsIf();
     initOptions();
+    return () => {
+      optionsIf && dcObserver.unsubscribe(optionsIf.name, handleOption)
+    }
   }, []);
 
   useEffect(() => {
@@ -31,11 +34,13 @@ export default function DcSelect(props: DcSelectProps) {
 
   function initOptionsIf() {
     if (optionsIf) {
-      dcObserver.subscribe(optionsIf.name, (res) => {
-        const opts = optionsIf.getOptions(res);
-        setOptionList(opts);
-      })
+      dcObserver.subscribe(optionsIf.name, handleOption)
     }
+  }
+
+  function handleOption(res: any) {
+    const opts = optionsIf?.getOptions(res) || [];
+    setOptionList(opts);
   }
 
   return <Select value={value} onChange={onChange} options={optionList}/>;

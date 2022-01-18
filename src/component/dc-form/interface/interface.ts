@@ -53,7 +53,8 @@ export interface DcObserver {
   historyList: {[key: string]: any[]};
   subscribe: (name: string, fn: (res: any) => void) => void;
   publish: (name: string, res: any) => void;
-  unsubscribe: (name: string) => void;
+  unsubscribe: (name: string, fn: (res?: any) => void) => void;
+  clear: () => void;
 }
 
 export interface LabelValue {

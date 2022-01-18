@@ -11,13 +11,16 @@ export default function DcCheckbox(props: DcCheckboxProps) {
   useEffect(() => {
     initOptionsIf();
     initOptions();
+    return () => {
+      optionsIf && dcObserver.unsubscribe(optionsIf.name, handleOption)
+    }
   }, []);
 
-  useEffect(() => {
-    if (value && optionList.length && value.some(item => !optionList.map(item => item.value).includes(item))) {
-      onChange?.(null);
-    }
-  }, [optionList, value])
+  // useEffect(() => {
+  //   if (value && optionList.length && value.some(item => !optionList.map(item => item.value).includes(item))) {
+  //     onChange?.(null);
+  //   }
+  // }, [optionList, value])
 
   function initOptions() {
     if (Array.isArray(options)) {
@@ -31,12 +34,19 @@ export default function DcCheckbox(props: DcCheckboxProps) {
 
   function initOptionsIf() {
     if (optionsIf) {
-      dcObserver.subscribe(optionsIf.name, (res) => {
-        const opts = optionsIf.getOptions(res);
-        setOptionList(opts);
-      })
+      dcObserver.subscribe(optionsIf.name, handleOption)
     }
   }
 
-  return <Checkbox.Group value={value} onChange={onChange} options={optionList}/>;
+  function handleOption(res: any) {
+    const opts = optionsIf?.getOptions(res) || [];
+    setOptionList((list) => {
+      if (list.length > 0) {
+        onChange?.(null);
+      }
+      return opts
+    });
+  }
+
+  return <Checkbox.Group className={'dc-checkbox'} value={value} onChange={onChange} options={optionList}/>;
 }

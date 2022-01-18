@@ -4,6 +4,7 @@ import {DcFormProps, DcFormRefProps, FormItem} from './interface/interface';
 import WidgetFactory from './widget.factory';
 import dcObserver from "@/component/dc-form/util/observer";
 import { Rule } from 'antd/lib/form';
+import './index.less';
 
 const DcForm = React.forwardRef<DcFormRefProps, DcFormProps>((props, ref) => {
   const { config, initialValues = {} } = props;
@@ -19,7 +20,37 @@ const DcForm = React.forwardRef<DcFormRefProps, DcFormProps>((props, ref) => {
   useEffect(() => {
     dataTrigger();
     initForm();
+    initObserver();
   }, []);
+
+  function initObserver() {
+    let properties: FormItem[] = config.properties;
+    properties.forEach(item => {
+      if (item.if) {
+        const conditions: boolean[] = Array.from({length: Object.keys(item.if).length});
+        Object.entries(item.if).forEach(([key, values]: [string, string[]], index) => {
+          dcObserver.subscribe(key, (res: any) => {
+            if (values.includes(res)) {
+              conditions[index] = true;
+              if (conditions.every(item => item)) {
+                setList((list) => {
+                  if (list.every(i => i.name !== item.name)) {
+                    dcObserver.publish(item.name, res);
+                    return [...list, item].sort((item1, item2) => Number(item1.weight) - Number(item2.weight));
+                  }
+                  return list;
+                });
+              }
+            } else {
+              conditions[index] = false;
+              dcObserver.publish(item.name, null);
+              setList((list) => list.filter(i => i.name !== item.name));
+            }
+          });
+        })
+      }
+    });
+  }
 
   function dataTrigger() {
     Object.entries(initialValues).forEach(([key, value]: [string, any]) => {
@@ -34,19 +65,6 @@ const DcForm = React.forwardRef<DcFormRefProps, DcFormProps>((props, ref) => {
         return true;
       }
       return Object.entries(item.if).every(([key, values]: [string, string[]]) => {
-        dcObserver.subscribe(key, (res: any) => {
-          if (values.includes(res)) {
-            setList((list) => {
-              if (list.every(i => i.name !== item.name)) {
-                return [...list, item];
-              }
-              return list;
-            });
-          } else {
-            dcObserver.publish(item.name, "");
-            setList((list) => [...list.filter(i => i.name !== item.name)]);
-          }
-        });
         return values.includes(initialValues?.[key]);
       });
     });
@@ -54,7 +72,6 @@ const DcForm = React.forwardRef<DcFormRefProps, DcFormProps>((props, ref) => {
   }
 
   function changeValue(name: string, value: any) {
-    console.log(name, value)
     dcObserver.publish(name, value);
   }
 
